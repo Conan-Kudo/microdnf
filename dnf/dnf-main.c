@@ -45,6 +45,12 @@ process_global_option (const gchar  *option_name,
     {
       ret = show_help ? TRUE : dnf_context_repo_disable (ctx, value, &local_error);
     }
+  else if (g_strcmp0 (option_name, "--disableplugin") == 0)
+    {
+      /* XXX: We don't actually have plugins to disable, so this does nothing */
+      g_print("No plugins to disable, so ignoring disableplugin setting!\n");
+      ret = TRUE;
+    }
   else if (g_strcmp0 (option_name, "--enablerepo") == 0)
     {
       ret = show_help ? TRUE : dnf_context_repo_enable (ctx, value, &local_error);
@@ -78,6 +84,7 @@ process_global_option (const gchar  *option_name,
 
 static const GOptionEntry global_opts[] = {
   { "assumeyes", 'y', G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &opt_yes, "Does nothing, we always assume yes", NULL },
+  { "disableplugin", '\0', G_OPTION_FLAG_NONE, G_OPTION_ARG_CALLBACK, process_global_option, "Disable plugin by an id", "ID" },
   { "disablerepo", '\0', G_OPTION_FLAG_NONE, G_OPTION_ARG_CALLBACK, process_global_option, "Disable repository by an id", "ID" },
   { "enablerepo", '\0', G_OPTION_FLAG_NONE, G_OPTION_ARG_CALLBACK, process_global_option, "Enable repository by an id", "ID" },
   { "nodocs", '\0', G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, &opt_nodocs, "Install packages without docs", NULL },
